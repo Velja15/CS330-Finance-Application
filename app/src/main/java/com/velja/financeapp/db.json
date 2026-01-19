@@ -5,21 +5,28 @@
       "title": "Restaurant",
       "price": 573.12,
       "pic": "resturant",
-      "time": "17 Jan 2026 19:15"
+      "time": "18 Jan 2026 19:15"
     },
     {
       "id": "2",
+      "title": "Cinema",
+      "price": 234.5,
+      "pic": "cinema",
+      "time": "17 Jan 2026 11:30"
+    },
+    {
+      "id": "3",
       "title": "Shopping",
       "price": 234.5,
       "pic": "market",
       "time": "16 Jan 2026 14:30"
     },
     {
-      "id": "3",
-      "title": "Transport",
-      "price": 45,
-      "pic": "expense",
-      "time": "15 Jan 2026 08:20"
+      "id": 3,
+      "pic": "market",
+      "price": 264.5,
+      "time": "16 Jan 2026 14:30",
+      "title": "Shopping"
     }
   ],
   "budgets": [
@@ -40,6 +47,12 @@
       "title": "Transportation",
       "price": 300,
       "percent": 15
+    },
+    {
+      "id": 0,
+      "percent": 11,
+      "price": 250,
+      "title": "Groceries"
     }
   ]
 }

@@ -56,6 +56,11 @@ class ReportViewModel @Inject constructor(
             repository.insertBudget(budget)
         }
     }
+    fun updateBudget(budget: BudgetDomain) {
+        viewModelScope.launch {
+            repository.insertBudget(budget)
+        }
+    }
 
     fun deleteBudget(budget: BudgetDomain) {
         viewModelScope.launch {

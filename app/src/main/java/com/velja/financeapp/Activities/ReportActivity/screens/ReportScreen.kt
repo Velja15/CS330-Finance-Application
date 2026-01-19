@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,11 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.velja.financeapp.Activities.DashboardActivity.components.BottomNavigationBar
-import com.velja.financeapp.Activities.ReportActivity.components.AddBudgetDialog
-import com.velja.financeapp.Activities.ReportActivity.components.BudgetItem
-import com.velja.financeapp.Activities.ReportActivity.components.CenterStatsCard
-import com.velja.financeapp.Activities.ReportActivity.components.GradientHeader
-import com.velja.financeapp.Activities.ReportActivity.components.SummaryColumns
+import com.velja.financeapp.Activities.ReportActivity.components.*
 import com.velja.financeapp.Domain.BudgetDomain
 import com.velja.financeapp.R
 
@@ -36,9 +31,14 @@ import com.velja.financeapp.R
 fun ReportScreen(
     budgets:List<BudgetDomain>,
     onBack:()->Unit,
-    onAddBudget: (BudgetDomain) -> Unit = {}
+    onAddBudget: (BudgetDomain) -> Unit = {},
+    onDeleteBudget: (BudgetDomain) -> Unit = {},
+    onEditBudget: (BudgetDomain) -> Unit = {}
 ) {
     var showAddDialog by remember { mutableStateOf(false)}
+    var showEditDialog by remember { mutableStateOf(false) }
+    var budgetToEdit by remember { mutableStateOf<BudgetDomain?>(null) }
+
     ConstraintLayout (modifier = Modifier.fillMaxSize()){
         val (scrollRef,bottomNavRef)=createRefs()
 
@@ -81,6 +81,21 @@ fun ReportScreen(
         )
     }
 
+    if (showEditDialog && budgetToEdit != null) {
+        EditBudgetDialog(
+            budget = budgetToEdit!!,
+            onDismiss = {
+                showEditDialog = false
+                budgetToEdit = null
+            },
+            onConfirm = { updatedBudget ->
+                onEditBudget(updatedBudget)
+                showEditDialog = false
+                budgetToEdit = null
+            }
+        )
+    }
+
 }
 
 @Composable
@@ -88,7 +103,9 @@ fun ReportContent(
     budgets: List<BudgetDomain>,
     modifier: Modifier= Modifier,
     onBack: () -> Unit,
-    onAddBudget: () -> Unit = {}
+    onAddBudget: () -> Unit = {},
+    onDeleteBudget: (BudgetDomain) -> Unit = {},
+    onEditBudget: (BudgetDomain) -> Unit = {}
 ){
     LazyColumn(
         modifier=modifier

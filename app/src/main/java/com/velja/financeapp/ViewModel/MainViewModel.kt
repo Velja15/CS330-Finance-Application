@@ -56,6 +56,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun updateExpense(expense: ExpenseDomain) {
+        viewModelScope.launch {
+            repository.insertExpense(expense)
+        }
+    }
+
     fun deleteExpense(expense: ExpenseDomain) {
         viewModelScope.launch {
             repository.deleteExpense(expense)

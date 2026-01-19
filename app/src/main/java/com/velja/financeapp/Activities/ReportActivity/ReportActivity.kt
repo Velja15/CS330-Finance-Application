@@ -34,6 +34,12 @@ class ReportActivity : ComponentActivity() {
                     onBack = { finish() },
                     onAddBudget = { budget ->
                         reportViewModel.addBudget(budget)
+                    },
+                    onDeleteBudget = { budget ->
+                        reportViewModel.deleteBudget(budget)
+                    },
+                    onEditBudget = { budget ->
+                        reportViewModel.updateBudget(budget)
                     }
                 )
             }

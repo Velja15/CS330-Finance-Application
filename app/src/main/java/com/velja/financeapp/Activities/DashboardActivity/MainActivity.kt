@@ -33,6 +33,12 @@ class MainActivity : ComponentActivity() {
                     onAddExpense = { expense ->
                         mainViewModel.addExpense(expense)
                     },
+                    onDeleteExpense = { expense ->
+                        mainViewModel.deleteExpense(expense)
+                    },
+                    onEditExpense = { expense ->
+                        mainViewModel.updateExpense(expense)
+                    },
                     onRefresh = {
                         mainViewModel.syncWithApi()
                     },

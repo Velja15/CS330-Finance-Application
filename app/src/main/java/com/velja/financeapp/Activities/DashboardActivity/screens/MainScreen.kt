@@ -20,6 +20,7 @@ import com.velja.financeapp.Activities.DashboardActivity.components.ActionButton
 import com.velja.financeapp.Activities.DashboardActivity.components.AddExpenseDialog
 import com.velja.financeapp.Activities.DashboardActivity.components.BottomNavigationBar
 import com.velja.financeapp.Activities.DashboardActivity.components.CardSection
+import com.velja.financeapp.Activities.DashboardActivity.components.EditExpenseDialog
 import com.velja.financeapp.Activities.DashboardActivity.components.ExpenseChartView
 import com.velja.financeapp.Activities.DashboardActivity.components.ExpenseItem
 import com.velja.financeapp.Activities.DashboardActivity.components.HeaderSection
@@ -44,10 +45,14 @@ fun MainScreen(
     onCardClick:()->Unit = {},
     expenses:List<ExpenseDomain>,
     onAddExpense: (ExpenseDomain) -> Unit = {},
+    onDeleteExpense: (ExpenseDomain) -> Unit = {},
+    onEditExpense: (ExpenseDomain) -> Unit = {},
     onRefresh: () -> Unit = {},
     isRefreshing: Boolean = false
 ){
     var showAddDialog by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
+    var expenseToEdit by remember { mutableStateOf<ExpenseDomain?>(null) }
 
     Box(
         modifier = Modifier
@@ -75,7 +80,15 @@ fun MainScreen(
                 item { ExpenseChartView(expenses = expenses) }
 
                 items(expenses) { item ->
-                    ExpenseItem(item)
+                    ExpenseItem(
+                        item = item,
+                        onDelete = { onDeleteExpense(it) },
+                        onEdit = {
+                            expenseToEdit = it
+                            showEditDialog = true
+                        }
+
+                    )
                 }
             }
         }
@@ -96,6 +109,20 @@ fun MainScreen(
             onConfirm = { expense ->
                 onAddExpense(expense)
                 showAddDialog = false
+            }
+        )
+    }
+    if (showEditDialog && expenseToEdit != null) {
+        EditExpenseDialog(
+            expense = expenseToEdit!!,
+            onDismiss = {
+                showEditDialog = false
+                expenseToEdit = null
+            },
+            onConfirm = { updatedExpense ->
+                onEditExpense(updatedExpense)
+                showEditDialog = false
+                expenseToEdit = null
             }
         )
     }
