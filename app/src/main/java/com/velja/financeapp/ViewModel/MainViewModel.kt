@@ -8,6 +8,7 @@ import com.velja.financeapp.Repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,19 +17,38 @@ class MainViewModel @Inject constructor(
     private val repository: MainRepository
 ) : ViewModel() {
     private val _expenses = MutableStateFlow<List<ExpenseDomain>>(emptyList())
-    val expenses: StateFlow<List<ExpenseDomain>> get() = _expenses
+    val expenses: StateFlow<List<ExpenseDomain>> = _expenses.asStateFlow()
 
-    private val _budgets = MutableStateFlow<List<BudgetDomain>>(emptyList())
-    val budgets: StateFlow<List<BudgetDomain>> get() = _budgets
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     init {
-        loadData()
+        loadExpenses()
     }
 
-    private fun loadData() {
+    private fun loadExpenses() {
         viewModelScope.launch {
-            _expenses.value = repository.getAllExpenses()
-            _budgets.value = repository.getAllBudgets()
+            _isLoading.value = true
+            repository.getAllExpenses().collect { expenseList ->
+                _expenses.value = expenseList
+                _isLoading.value = false
+            }
         }
+    }
+
+    fun addExpense(expense: ExpenseDomain) {
+        viewModelScope.launch {
+            repository.insertExpense(expense)
+        }
+    }
+
+    fun deleteExpense(expense: ExpenseDomain) {
+        viewModelScope.launch {
+            repository.deleteExpense(expense)
+        }
+    }
+
+    fun getTotalExpenses(): Double {
+        return _expenses.value.sumOf { it.price }
     }
 }

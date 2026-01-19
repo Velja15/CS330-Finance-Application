@@ -5,17 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.velja.financeapp.Activities.DashboardActivity.screens.MainScreen
 import com.velja.financeapp.Activities.ReportActivity.ReportActivity
-import com.velja.financeapp.Domain.ExpenseDomain
 import com.velja.financeapp.ViewModel.MainViewModel
 import com.velja.financeapp.ui.theme.FinanceApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,19 +21,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val mainViewModel: MainViewModel = hiltViewModel()
+            val expenses by mainViewModel.expenses.collectAsState()
 
             FinanceApplicationTheme {
                 MainScreen(
-                    expenses = mainViewModel.loadData(),
+                    expenses = expenses,
                     onCardClick = {
-                    startActivity(Intent(this, ReportActivity::class.java))
-                })
+                        startActivity(Intent(this, ReportActivity::class.java))
+                    },
+                    onAddExpense = { expense ->
+                        mainViewModel.addExpense(expense)
+                    }
+                )
             }
         }
     }
-}
-
-private fun MainViewModel.loadData(): List<ExpenseDomain> {
-    return TODO("Provide the return value")
 }
 

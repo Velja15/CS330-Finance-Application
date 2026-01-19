@@ -26,10 +26,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.velja.financeapp.R
 
-
 @Composable
 @Preview
-fun ActionButtonRow(){
+fun ActionButtonRowPreview(){
+    ActionButtonRow()
+}
+@Composable
+fun ActionButtonRow(
+    onAddClick: () -> Unit = {}
+){
     Row(
         modifier = Modifier
             .padding(vertical = 16.dp)
@@ -39,31 +44,37 @@ fun ActionButtonRow(){
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ){
         ActionButton(R.drawable.btn_1,"Deposit")
-        ActionButton(R.drawable.btn_2,"Withdraw")
+        ActionButton(R.drawable.btn_2,"Withdraw") { onAddClick() }
         ActionButton(R.drawable.btn_3,"Add Card")
         ActionButton(R.drawable.btn_4,"View all")
     }
 }
 
 @Composable
-fun RowScope.ActionButton(icon: Int, text: String) {
+fun RowScope.ActionButton(
+    icon: Int,
+    text: String,
+    onClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .height(78.dp)
             .weight(1f)
             .clip(RoundedCornerShape(10.dp))
             .background(colorResource(R.color.lightBlue))
-            .clickable{}
+            .clickable { onClick() }
             .padding(all = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Image(painter = painterResource(id=icon),
-        contentDescription = null,
+        Image(
+            painter = painterResource(id = icon),
+            contentDescription = null,
             modifier = Modifier.size(32.dp)
         )
-        Text(text = text,
-            color=colorResource(R.color.darkBlue),
+        Text(
+            text = text,
+            color = colorResource(R.color.darkBlue),
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier

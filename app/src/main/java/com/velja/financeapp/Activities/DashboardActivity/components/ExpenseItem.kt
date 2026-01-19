@@ -28,6 +28,19 @@ import com.velja.financeapp.R
 
 @Composable
 fun ExpenseItem(item: ExpenseDomain){
+
+    val context = LocalContext.current
+
+    val resId = try {
+        val id = context.resources.getIdentifier(
+            item.pic, "drawable", context.packageName
+        )
+        if (id != 0) id else R.drawable.btn_1
+    } catch (e: Exception) {
+        R.drawable.btn_1
+    }
+
+
     Row(modifier = Modifier
         .padding(vertical = 4.dp)
         .fillMaxWidth()
@@ -42,14 +55,8 @@ fun ExpenseItem(item: ExpenseDomain){
         ),
         verticalAlignment = Alignment.CenterVertically
     ){
-        val context= LocalContext.current
-        val resId=context.resources.getIdentifier(
-            item.pic,"drawable",  context.packageName
-        )
         Image(
-            painter = painterResource(context.resources.getIdentifier(
-                item.pic, "drawable", context.packageName
-            )),
+            painter = painterResource(resId),
                 contentDescription = null,
             modifier = Modifier
                 .padding(8.dp)
