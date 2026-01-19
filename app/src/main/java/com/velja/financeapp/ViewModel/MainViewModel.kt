@@ -22,8 +22,12 @@ class MainViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _isSyncing = MutableStateFlow(false)
+    val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
+
     init {
         loadExpenses()
+        syncWithApi()
     }
 
     private fun loadExpenses() {
@@ -36,6 +40,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun syncWithApi() {
+        viewModelScope.launch {
+            _isSyncing.value = true
+            try {
+                repository.syncExpenses()
+            } catch (e: Exception) {
+            }
+            _isSyncing.value = false
+        }
+    }
     fun addExpense(expense: ExpenseDomain) {
         viewModelScope.launch {
             repository.insertExpense(expense)

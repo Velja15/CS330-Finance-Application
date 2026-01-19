@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,46 +37,56 @@ fun MainScreenPreview(){
     )
     MainScreen(expenses = expenses)
 }
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     onCardClick:()->Unit = {},
     expenses:List<ExpenseDomain>,
-    onAddExpense: (ExpenseDomain) -> Unit = {}
+    onAddExpense: (ExpenseDomain) -> Unit = {},
+    onRefresh: () -> Unit = {},
+    isRefreshing: Boolean = false
 ){
     var showAddDialog by remember { mutableStateOf(false) }
 
-    Box (modifier=Modifier
-        .fillMaxSize()
-        .background(Color.White)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 70.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ){
-            item{ HeaderSection()}
-            item { CardSection(onClick = onCardClick) }
-            item { ActionButtonRow(
-                onAddClick = { showAddDialog = true}
-            ) }
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 70.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                item { HeaderSection() }
+                item { CardSection(onClick = onCardClick) }
+                item {
+                    ActionButtonRow(
+                        onAddClick = { showAddDialog = true }
+                    )
+                }
 
-            items(expenses) {item -> ExpenseItem(item)}
+                items(expenses) { item ->
+                    ExpenseItem(item)
+                }
+            }
         }
 
         BottomNavigationBar(
             modifier = Modifier
-                .align (Alignment.BottomCenter)
+                .align(Alignment.BottomCenter)
                 .height(80.dp),
-            onItemSelected = {itemId->
-                if (itemId== R.id.wallet)
-                {
-
+            onItemSelected = { itemId ->
+                if (itemId == R.id.wallet) {
                 }
             }
         )
-
     }
     if (showAddDialog) {
         AddExpenseDialog(

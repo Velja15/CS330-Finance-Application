@@ -22,8 +22,12 @@ class ReportViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _isSyncing = MutableStateFlow(false)
+    val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
+
     init {
         loadBudgets()
+        syncWithApi()
     }
 
     private fun loadBudgets() {
@@ -33,6 +37,17 @@ class ReportViewModel @Inject constructor(
                 _budgets.value = budgetList
                 _isLoading.value = false
             }
+        }
+    }
+
+    fun syncWithApi() {
+        viewModelScope.launch {
+            _isSyncing.value = true
+            try {
+                repository.syncBudgets()
+            } catch (e: Exception) {
+            }
+            _isSyncing.value = false
         }
     }
 

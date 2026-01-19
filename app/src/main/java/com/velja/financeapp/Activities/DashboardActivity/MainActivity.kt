@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val mainViewModel: MainViewModel = hiltViewModel()
             val expenses by mainViewModel.expenses.collectAsState()
+            val isSyncing by mainViewModel.isSyncing.collectAsState()
 
             FinanceApplicationTheme {
                 MainScreen(
@@ -31,7 +32,11 @@ class MainActivity : ComponentActivity() {
                     },
                     onAddExpense = { expense ->
                         mainViewModel.addExpense(expense)
-                    }
+                    },
+                    onRefresh = {
+                        mainViewModel.syncWithApi()
+                    },
+                    isRefreshing = isSyncing
                 )
             }
         }

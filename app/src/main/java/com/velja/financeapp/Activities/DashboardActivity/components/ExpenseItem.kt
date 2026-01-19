@@ -27,8 +27,7 @@ import com.velja.financeapp.Domain.ExpenseDomain
 import com.velja.financeapp.R
 
 @Composable
-fun ExpenseItem(item: ExpenseDomain){
-
+fun ExpenseItem(item: ExpenseDomain) {
     val context = LocalContext.current
 
     val resId = try {
@@ -40,43 +39,46 @@ fun ExpenseItem(item: ExpenseDomain){
         R.drawable.btn_1
     }
 
-
-    Row(modifier = Modifier
-        .padding(vertical = 4.dp)
-        .fillMaxWidth()
-        .height(70.dp)
-        .padding(horizontal = 16.dp)
-        .clip(RoundedCornerShape(12.dp))
-        .background(Color.White)
-        .border(
-            width = 1.dp,
-            color = Color.LightGray,
-            shape = RoundedCornerShape(12.dp)
-        ),
+    Row(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .fillMaxWidth()
+            .height(70.dp)
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
+            .border(
+                width = 1.dp,
+                color = Color.LightGray,
+                shape = RoundedCornerShape(12.dp)
+            ),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Image(
             painter = painterResource(resId),
-                contentDescription = null,
+            contentDescription = null,
             modifier = Modifier
                 .padding(8.dp)
                 .size(55.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(colorResource(R.color.lightBlue))
                 .padding(12.dp)
-                )
+        )
+
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(start=16.dp)
+                .padding(start = 16.dp)
         ) {
-            Text(item.title,
+            Text(
+                item.title,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
-                color=colorResource(R.color.darkBlue)
+                color = colorResource(R.color.darkBlue)
             )
-            Text(item.time, color=colorResource(R.color.darkBlue))
+            Text(item.time, color = colorResource(R.color.darkBlue))
         }
+
         Text(
             "$${item.price}",
             fontSize = 18.sp,
@@ -85,8 +87,6 @@ fun ExpenseItem(item: ExpenseDomain){
             modifier = Modifier.padding(end = 16.dp)
         )
     }
-
-
 }
 
 @Preview
