@@ -10,7 +10,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.velja.financeapp.Activities.ReportActivity.screens.ReportScreen
 import com.velja.financeapp.R
 import com.velja.financeapp.ViewModel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -15,21 +15,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.velja.financeapp.Activities.DashboardActivity.screens.MainScreen
 import com.velja.financeapp.Activities.ReportActivity.ReportActivity
+import com.velja.financeapp.Domain.ExpenseDomain
 import com.velja.financeapp.ViewModel.MainViewModel
 import com.velja.financeapp.ui.theme.FinanceApplicationTheme
-
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.hilt.navigation.compose.hiltViewModel
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val mainViewModel: MainViewModel = hiltViewModel()
+
             FinanceApplicationTheme {
-                MainScreen(expenses = mainViewModel.loadData(), onCardClick = {
+                MainScreen(
+                    expenses = mainViewModel.loadData(),
+                    onCardClick = {
                     startActivity(Intent(this, ReportActivity::class.java))
                 })
             }
         }
     }
+}
+
+private fun MainViewModel.loadData(): List<ExpenseDomain> {
+    return TODO("Provide the return value")
 }
 
