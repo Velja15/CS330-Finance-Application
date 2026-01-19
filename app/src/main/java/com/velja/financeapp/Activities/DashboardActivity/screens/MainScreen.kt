@@ -20,6 +20,7 @@ import com.velja.financeapp.Activities.DashboardActivity.components.ActionButton
 import com.velja.financeapp.Activities.DashboardActivity.components.AddExpenseDialog
 import com.velja.financeapp.Activities.DashboardActivity.components.BottomNavigationBar
 import com.velja.financeapp.Activities.DashboardActivity.components.CardSection
+import com.velja.financeapp.Activities.DashboardActivity.components.ExpenseChartView
 import com.velja.financeapp.Activities.DashboardActivity.components.ExpenseItem
 import com.velja.financeapp.Activities.DashboardActivity.components.HeaderSection
 import com.velja.financeapp.Domain.ExpenseDomain
@@ -71,6 +72,7 @@ fun MainScreen(
                         onAddClick = { showAddDialog = true }
                     )
                 }
+                item { ExpenseChartView(expenses = expenses) }
 
                 items(expenses) { item ->
                     ExpenseItem(item)
